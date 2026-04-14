@@ -19,12 +19,12 @@ const AppSidebar = () => {
             {!isOpen && (
                 <div className="fixed inset-0 z-30 blur-lg sm:hidden" onClick={toggleSidebar} />
             )}
-            <aside id="top-bar-sidebar" className={`fixed top-0 left-0 ml-64 z-40 w-64  h-full transition-transform ${isOpen ? `-translate-x-full` : `translate-x-0`} sm:translate-x-0`} aria-label="Sidebar">
-                <div className=" h-full px-3 py-4 overflow-y-auto bg-neutral-primary-soft border-e border-default">
+            <aside id="top-bar-sidebar" className={`fixed top-16 left-0 z-40 w-64 h-[calc(100vh-4rem)] transition-transform  ${isOpen ? `-translate-x-full` : `translate-x-0`} sm:translate-x-0`} aria-label="Sidebar">
+                <div className="h-full px-3 py-4 overflow-y-auto border-r border-black">
                     <ul className=" space-y-2 font-medium">
                         {sidebarItems.map((sidebarItem) => (
                             <li>
-                                <Link to={sidebarItem.path} className=" flex items-center px-2 py-1.5 text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
+                                <Link to={sidebarItem.path} className=" flex items-center px-2 py-1.5 text white text-body rounded-base hover:bg-neutral-tertiary hover:text-fg-brand group">
                                     <span className=" ms-3">{sidebarItem.text}</span>
                                 </Link>
                             </li>

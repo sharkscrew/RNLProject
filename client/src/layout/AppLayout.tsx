@@ -3,6 +3,7 @@ import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
 import { SidebarProvider } from "../contexts/SidebarContext";
 import { HeaderProvider } from "../contexts/HeaderContext";
+
 const LayoutContent = () => {
     return (
         <>
