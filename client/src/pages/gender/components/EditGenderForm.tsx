@@ -64,6 +64,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
         }
     }
 
+
     useEffect(() => {
         if (gender_id) {
             const parsedGenderId = parseInt(gender_id)

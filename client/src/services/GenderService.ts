@@ -33,8 +33,15 @@ const GenderService = {
         } catch (error) {
             throw error;
         }
+    },
+    destroyGender: async (genderId: string | number) => {
+        try {
+            const response = await AxiosInstance.put(`/gender/destroyGender/${genderId}`)
+            return response
+        } catch (error) {
+            throw error;
+        }
     }
-
 };
 
 export default GenderService
