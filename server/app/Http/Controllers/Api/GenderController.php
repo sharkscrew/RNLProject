@@ -51,4 +51,14 @@ class GenderController extends Controller
             'message' => 'Gender Successfully Updated'
         ], 200);
     }
+
+    public function destroyGender(Gender $gender){
+        $gender->update([
+            'is_deleted' => true
+        ]);
+
+        return response()->json([
+            'message' => 'Gender Successfully Deleted'
+        ], 200);
+    }
 }
