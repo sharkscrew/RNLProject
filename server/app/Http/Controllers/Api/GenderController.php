@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class GenderController extends Controller
 {
+    public function loadGenders(){
+        $genders = Gender::where('tbl_genders.is_deleted', false)
+        ->get();
+        return response()->json([
+            'genders' => $genders
+        ], 200);
+    }
     public function storeGender(Request $request) 
     {
         $validated = $request->validate([
@@ -20,6 +27,28 @@ class GenderController extends Controller
 
         return response()->json([
             'message' => 'Gender Successfully Saved.'
+        ], 200);
+    }
+
+    public function getGender($genderId)
+    {
+        $gender= Gender::find($genderId);
+    
+        return response()->json([
+            'gender' => $gender
+        ], 200);
+    }
+    public function updateGender(Request $request,Gender $gender){
+        $validated = $request->validate([
+            'gender' => ['required', 'min:3', 'max:30']
+        ]);
+
+        $gender->update ([
+            'gender' => $validated['gender'],
+            'is_deleted' => false
+        ]);
+        return response() ->json ([
+            'message' => 'Gender Successfully Updated'
         ], 200);
     }
 }
