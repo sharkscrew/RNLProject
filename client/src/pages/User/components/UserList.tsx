@@ -19,7 +19,7 @@ const UserList: FC<UserListProps> = ({ onAddUser }) => {
                 <>
                     <div className="flex gap-4">
                         <button type="button" className="text-green-600 font-medium cursor-pointer hover:underline">Edit</button>
-                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Edit</button>
+                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Delete</button>
                     </div>
                 </>
             ),
@@ -36,7 +36,7 @@ const UserList: FC<UserListProps> = ({ onAddUser }) => {
                 <>
                     <div className="flex gap-4">
                         <button type="button" className="text-green-600 font-medium cursor-pointer hover:underline">Edit</button>
-                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Edit</button>
+                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Delete</button>
                     </div>
                 </>
             ),
@@ -53,7 +53,7 @@ const UserList: FC<UserListProps> = ({ onAddUser }) => {
                 <>
                     <div className="flex gap-4">
                         <button type="button" className="text-green-600 font-medium cursor-pointer hover:underline">Edit</button>
-                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Edit</button>
+                        <button type="button" className="text-red-600 font-medium cursor-pointer hover:underline">Delete</button>
                     </div>
                 </>
             ),

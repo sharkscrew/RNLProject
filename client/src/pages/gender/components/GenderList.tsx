@@ -1,81 +1,44 @@
+import { useEffect, useState, type FC } from "react"
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "../../../components/table"
+import type { GenderColumns } from "../../../interfaces/GenderColumns"
+import GenderService from "../../../services/GenderService"
+import Spinner from "../../../components/Spinner/Spinner"
 import { Link } from "react-router-dom"
-import type { ReactNode } from "react"
 
-type GenderRow = {
-    gender_id: number
-    gender: string
-    action?: ReactNode
+interface GenderListProps {
+    refreshKey: boolean
 }
 
-const GenderList = () => {
-    const genders: GenderRow[] = [
-        {
-            gender_id: 1,
-            gender: "Male",
-            action: (
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/gender/edit"
-                        className="  text-green-600 hover:underline font-medium  "
-                    >
-                        Edit
-                    </Link>
-                    <Link
-                        to="/gender/delete"
-                        className="  text-red-600 hover:underline font-medium  "
-                    >
-                        Delete
-                    </Link>
-                </div>
-            ),
-        },
-        {
-            gender_id: 2,
-            gender: "Female",
-            action: (
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/gender/edit"
-                        className="  text-green-600 hover:underline font-medium  "
-                    >
-                        Edit
-                    </Link>
-                    <Link
-                        to="/gender/delete"
-                        className="  text-red-600 hover:underline font-medium  "
-                    >
-                        Delete
-                    </Link>
-                </div>
-            ),
-        },
-        {
-            gender_id: 3,
-            gender: "Prefer Not to Say",
-            action: (
-                <div className="flex items-center gap-4">
-                    <Link
-                        to="/gender/edit"
-                        className="  text-green-600 hover:underline font-medium  "
-                    >
-                        Edit
-                    </Link>
-                    <Link
-                        to="/gender/delete"
-                        className="  text-red-600 hover:underline font-medium  "
-                    >
-                        Delete
-                    </Link>
-                </div>
-            ),
-        },
-    ]
+const GenderList: FC<GenderListProps> = ({ refreshKey }) => {
+    const [loadingGenders, setLoadingGenders] = useState(false)
+    const [genders, setGenders] = useState<GenderColumns[]>([])
+
+    const handleLoadGenders = async () => {
+        try {
+            setLoadingGenders(true)
+            const res = await GenderService.loadGenders()
+
+            if (res.status === 200) {
+                setGenders(res.data.genders)
+            } else {
+                console.error('Unexpected status error occurred during loading genders: ', res.status)
+            }
+        } catch (error) {
+            console.error('Unexpected server error occured during loading genders:', error)
+        } finally {
+            setLoadingGenders(false)
+        }
+    }
+
+
+    useEffect(() => {
+        handleLoadGenders()
+    }, [refreshKey])
 
     return (
         <>
             <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-                <div className="max-w-full max-h-[calc(100vh) overflow-x-auto "></div>
+                <div className="max-w-full max-h-[calc(100vh)] overflow-x-auto "></div>
                 <Table className="border-collapse">
                     <TableHeader className=" border-b border-gray-200 bg-blue-600 sticky top-0 text-xs text-white">
                         <TableRow>
@@ -88,7 +51,7 @@ const GenderList = () => {
 
                             <TableCell
                                 isHeader
-                                className="px-5 py-3 text-center  "
+                                className="px-5 py-3 text-start  "
                             >
                                 Gender
                             </TableCell>
@@ -102,18 +65,24 @@ const GenderList = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody className="divide-y divide-gray-100 text-sm text-gray-600">
-                        {genders.map((gender, index) => (
-                            <TableRow
-                                className="hover:bg-gray-100" key={index}
-                            >
-                                <TableCell className="border-0 px-4 py-3 text-center">
-                                    {gender.gender_id}
+                        {loadingGenders ? (
+                            <TableRow>
+                                <TableCell colSpan={3} className="px-4 py-3 text-center">
+                                    <Spinner size="md" />
                                 </TableCell>
-                                <TableCell className="border-0 px-4 py-3 text-center">
+                            </TableRow>
+                        ) : genders.map((gender, index) => (
+                            <TableRow className="hover:bg-gray-100" key={index}>
+                                <TableCell className="px-4 py-3 text-center">
+                                    {index + 1}
+                                </TableCell>
+                                <TableCell className="px-4 py-3 text-start">
                                     {gender.gender}
                                 </TableCell>
-                                <TableCell className="border-0 px-4 py-3 text-center">
-                                    {gender.action ?? "—"}
+                                <TableCell className="px-4 py-3 text-center">
+                                    <div className="flex just-justify-center item-center">
+                                        <Link to={`/gender/edit/${gender.gender_id}`} className="text-green-700 font-medium hover:underline">Edit</Link>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}
