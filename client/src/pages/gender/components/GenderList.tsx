@@ -72,7 +72,7 @@ const GenderList: FC<GenderListProps> = ({ refreshKey }) => {
                                 </TableCell>
                             </TableRow>
                         ) : genders.map((gender, index) => (
-                            <TableRow className="hover:bg-gray-100" key={index}>
+                            <TableRow className="hover:bg-gray-100" key={gender.gender_id}>
                                 <TableCell className="px-4 py-3 text-center">
                                     {index + 1}
                                 </TableCell>
@@ -80,7 +80,7 @@ const GenderList: FC<GenderListProps> = ({ refreshKey }) => {
                                     {gender.gender}
                                 </TableCell>
                                 <TableCell className="px-4 py-3 text-center">
-                                    <div className="flex just-justify-center item-center gap-4">
+                                    <div className="flex justify-center items-center gap-4">
                                         <Link to={`/gender/edit/${gender.gender_id}`} className="text-green-600 font-medium hover:underline">Edit</Link>
                                         <Link to={`/gender/delete/${gender.gender_id}`} className="text-red-600 font-medium hover:underline">Delete</Link>
                                     </div>

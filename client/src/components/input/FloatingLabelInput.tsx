@@ -14,7 +14,7 @@ interface FloatingLabelInputProps {
     autoFocus?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
-    errors?: string[];
+    errors?: string[] | string;
 }
 
 const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
@@ -32,6 +32,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
     disabled,
     readOnly,
     errors }) => {
+    const errorList = Array.isArray(errors) ? errors : errors ? [errors] : [];
     return (
         <>
             <div className="relative">
@@ -43,7 +44,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
                     onChange={onChange}
                     className={`${newInputClassName
                         ? newInputClassName : `
-                block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-200 appearance-none focus:border-[#10b981] focus:outline-none focus:ring-0 peer ${inputClassName}`} 
+                block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border border-gray-200 appearance-none focus:border-[#10b981] focus:outline-none focus:ring-0 peer ${type === 'date' ? 'pr-10 [&::-webkit-calendar-picker-indicator]:cursor-pointer' : ''} ${inputClassName}`} 
                 `}
                     placeholder=" "
                     autoFocus={autoFocus}
@@ -54,7 +55,7 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
                     htmlFor={name}
                     className={`${newLabelClassName
                         ? newLabelClassName
-                        : `absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-white px-2
+                        : `absolute pointer-events-none text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-white px-2
                             peer-focus:px-2 peer-focus:text-black
                             peer-placeholder-shown:scale-100
                             peer-placeholder-shown:top-1/2
@@ -70,8 +71,14 @@ const FloatingLabelInput: FC<FloatingLabelInputProps> = ({
                     )}
                 </label>
             </div >
-            {errors && errors.length > 0 && (
-                <span className="text-red-600 text-xs">{errors[0]}</span>
+            {errorList.length > 0 && (
+                <div className="mt-1">
+                    {errorList.map((err, index) => (
+                        <p key={index} className="text-red-600 text-xs">
+                            {err}
+                        </p>
+                    ))}
+                </div>
             )}
         </>
     );

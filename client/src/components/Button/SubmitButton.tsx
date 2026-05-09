@@ -4,7 +4,6 @@ import Spinner from "../Spinner/Spinner"
 
 interface SubmitButtonProps {
     label: string
-    path?: string
     newClassName?: string
     className?: string
     loading?: boolean
@@ -12,12 +11,15 @@ interface SubmitButtonProps {
 }
 const SubmitButton: FC<SubmitButtonProps> = ({ label, newClassName, className, loading, loadingLabel
 }) => {
+    const resolvedClassName = newClassName
+        ? newClassName
+        : `px-4 py-3 bg-green-600 hover:bg-green-700 text-white text-sm font-medium cursor-pointer rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${className ?? ""}`;
+
     return (
         <>
             <button
                 type="submit"
-                className={` {${newClassName ? newClassName : ` px-4 py-3 bg-green-600 hover:bg-green-700 text-white  text-sm font-medium cursor-pointer rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed ${className} `
-                    }`}
+                className={resolvedClassName}
                 disabled={loading}
             >
                 {loading ? (

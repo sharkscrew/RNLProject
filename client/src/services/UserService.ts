@@ -1,0 +1,30 @@
+import AxiosInstance from "./AxiosIntance"
+
+const UserService = {
+    loadUsers: async () => {
+        try {
+            const response = await AxiosInstance.get('/user/loadUsers')
+            return response
+        } catch (error) {
+            throw error;
+        }
+    }, 
+    storeUser: async (data: any) => {
+        try {
+            const response = await AxiosInstance.post('/user/storeUser', data) 
+            return response;
+        } catch(error) {
+            throw error;
+        }
+    },
+    updateUser: async (userId: string | number, data: any) => {
+        try {
+            const response = await AxiosInstance.put(`/user/updateUser/${userId}`, data)
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+};
+
+export default UserService;

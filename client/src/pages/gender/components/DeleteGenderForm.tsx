@@ -29,10 +29,12 @@ const DeleteGenderForm = () => {
                 );
             }
         } catch (error) {
-            console.error(
-                "Unexpected server error occurred during getting gender: ",
-                error,
-            );
+            const status = (error as any)?.response?.status;
+            if (status === 404) {
+                navigate('/', { state: { message: "Gender not found or already deleted." } });
+                return;
+            }
+            console.error("Unexpected server error occurred during getting gender: ", error);
         } finally {
             setLoadingGet(false);
         }
@@ -88,18 +90,13 @@ const DeleteGenderForm = () => {
                         />
                     </div>
                     <div className="flex justify-end gap-2">
-                        {!loadingDestroy && (
-                            <>
-                                <BackButton label="Back" path="/" />
-                                <SubmitButton
-                                    label="Delete Gender"
-                                    path="/"
-                                    className="bg-red-600 hover:bg-red-700"
-                                    loading={loadingDestroy}
-                                    loadingLabel="Deleting Gender..."
-                                />
-                            </> 
-                        )}
+                        {!loadingDestroy && <BackButton label="Back" path="/" />}
+                        <SubmitButton
+                            label="Delete Gender"
+                            className="bg-red-600 hover:bg-red-700"
+                            loading={loadingDestroy}
+                            loadingLabel="Deleting Gender..."
+                        />
                     </div>
                 </form>
             )}

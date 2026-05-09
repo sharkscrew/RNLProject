@@ -4,7 +4,7 @@ import SubmitButton from "../../../components/Button/SubmitButton"
 import FloatingLabelInput from "../../../components/input/FloatingLabelInput"
 import type { GenderFieldErrors } from "../../../interfaces/GenderFieldErrors"
 import GenderService from "../../../services/GenderService"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Spinner from "../../../components/Spinner/Spinner"
 
 interface EditGenderFormProps {
@@ -18,6 +18,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
     const [errors, setErrors] = useState<GenderFieldErrors>({});
 
     const { gender_id } = useParams()
+    const navigate = useNavigate()
 
     const handleGetGender = async (genderId: string | number) => {
         try {
@@ -32,6 +33,11 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
             }
 
         } catch (error) {
+            const status = (error as any)?.response?.status;
+            if (status === 404) {
+                navigate('/', { state: { message: 'Gender not found or already deleted.' } });
+                return;
+            }
             console.error('Unexpected server error occured during getting gender:', error)
         } finally {
             setLoadingGet(false)
@@ -49,6 +55,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
             if (res.status === 200) {
                 setErrors({})
                 onGenderUpdated(res.data.message)
+                navigate('/', { state: { message: res.data.message } })
             } else {
                 console.error('Unexpected status errror occured during updating gender: ', res.status)
             }
@@ -98,7 +105,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
                         {!loadingUpdate && (
                             <BackButton label="Back" path="/" />
                         )}
-                        <SubmitButton label="Update Gender" loading={loadingUpdate} loadingLabel="Upadating Gender ..." />
+                        <SubmitButton label="Update Gender" loading={loadingUpdate} loadingLabel="Updating Gender..." />
                     </div>
                 </form>
             )}
