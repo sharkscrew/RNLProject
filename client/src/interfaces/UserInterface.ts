@@ -1,3 +1,5 @@
+import type { GenderColumns } from "./GenderColumns";
+
 export interface UserColumns {
     user_id: number;
     first_name: string;
@@ -13,3 +15,15 @@ export interface UserColumns {
     created_at: string;
     updated_at: string;
 }
+
+export interface UserFieldErrors {
+    first_name?: string[]
+    middle_name?: string[]
+    last_name?: string[]
+    suffix_name?: string[]
+    gender?: string[]
+    birth_date?: string[]
+    username?: string[]
+    password?: string[]
+    password_confirmation?: string[]
+} 
