@@ -1,4 +1,4 @@
-import AxiosInstance from "./AxiosIntance"
+import AxiosInstance from "./AxiosInstance"
 
 const GenderService = {
     loadGenders: async () => {

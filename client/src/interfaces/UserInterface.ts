@@ -1,4 +1,4 @@
-import type { GenderColumns } from "./GenderColumns";
+import type { GenderColumns } from "./GenderInterface";
 
 export interface UserColumns {
     user_id: number;

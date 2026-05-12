@@ -86,4 +86,20 @@ class UserController extends Controller
             'user' => $user
         ], 200);
     }
+    public function destroyUser(User $user): \Illuminate\Http\JsonResponse
+    {
+        if ($user->is_deleted) {
+            return response()->json([
+                'message' => 'User already deleted.',
+            ], 200);
+        }
+
+        $user->update([
+            'is_deleted' => true,
+        ]);
+
+        return response()->json([
+            'message' => 'User Successfully Deleted.',
+        ], 200);
+    }
 }
