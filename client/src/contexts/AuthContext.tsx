@@ -13,13 +13,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider: FC<{children: ReactNode}> = ({children}) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<UserDetails | null>(null)
     const [loading, setLoading] = useState(true)
 
     const login = async (username: string, password: string) => {
         try {
-            const res = await AuthService.login({username, password})
+            const res = await AuthService.login({ username, password })
 
             if (res.status === 200) {
                 localStorage.setItem('token', res.data.token)
@@ -42,7 +42,7 @@ export const AuthProvider: FC<{children: ReactNode}> = ({children}) => {
                 localStorage.removeItem('token')
                 setUser(null)
             } else {
-                console.error ('Unexpected status error occurred during logging user out: ', res.status)
+                console.error('Unexpected status error occurred during logging user out: ', res.status)
             }
         } catch (error) {
             console.error('Unexpected server error occurred during logging user out: ', error)
@@ -56,7 +56,7 @@ export const AuthProvider: FC<{children: ReactNode}> = ({children}) => {
         const token = localStorage.getItem('token')
 
         if (token) {
-            
+
             try {
                 const res = await AuthService.me()
 
@@ -70,16 +70,21 @@ export const AuthProvider: FC<{children: ReactNode}> = ({children}) => {
                 }
             } catch (error) {
                 setUser(null)
-                    localStorage.removeItem('token')
+                localStorage.removeItem('token')
 
-                    console.error('Unexpected server error occurred during checking authentication: ', error)
+                console.error('Unexpected server error occurred during checking authentication: ', error)
             }
+
+            setLoading(false)
         } else {
             setUser(null)
+            setLoading(false)
         }
+
+        setLoading(false)
     }
 
-    useEffect (() => {
+    useEffect(() => {
         checkAuth();
     }, []);
 

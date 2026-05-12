@@ -1,10 +1,53 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useHeader } from "../contexts/HeaderContext";
 import { useSidebar } from "../contexts/SidebarContext";
+import { useAuth } from "../contexts/AuthContext";
+import { useEffect, useState, type FormEvent } from "react";
 
 const AppHeader = () => {
     const { isOpen, toggleUserMenu } = useHeader();
     const { toggleSidebar } = useSidebar()
+    const { user, logout } = useAuth()
+
+    const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleLogout = async (e: FormEvent) => {
+        try {
+            e.preventDefault()
+
+            setIsLoading(true)
+            await logout()
+            navigate('/')
+        } catch (error) {
+            console.error(' Unexpected server error occured during logging user out: ', error)
+        } finally {
+            setIsLoading(false)
+        }
+    };
+
+    const handleUserFullNameFormat = () => {
+        if (!user) return ''
+
+        let fullName = `${user.user.last_name}, ${user.user.first_name}`
+
+        if (user.user.middle_name) {
+            fullName += `${user.user.middle_name.charAt(0)}.`
+        }
+
+
+        if (user.user.suffix_name) {
+            fullName += `${user.user.suffix_name}.`
+        }
+
+        return fullName;
+    };
+
+    useEffect(() => {
+        if (user) {
+            handleUserFullNameFormat();
+        }
+    }, [user])
 
     return (
         <>
@@ -40,15 +83,15 @@ const AppHeader = () => {
                                 <div className={` absolute right-8 top-9 min-w-[200px] z-50 ${isOpen ? "block" : "hidden"} `} id="dropdown-user">
                                     <div className="px-4 py-3 border-b border-white/10 bg-slate-800 text-white" role="none">
                                         <p className="text-sm font-medium text-white" role="none">
-                                            Ersyl Jay Bingco
+                                            {handleUserFullNameFormat()}
                                         </p>
                                         <p className="text-sm text-white/80 truncate" role="none">
-                                            ersyljay103@gmail.com
+
                                         </p>
                                     </div>
                                     <ul className="p-2 text-sm text-white/90 font-medium bg-slate-800" role="none">
                                         <li>
-                                            <Link to="#" className="inline-flex items-center w-full p-2 hover:bg-white/10 rounded" role="menuitem">Sign out</Link>
+                                            <button type="button" className="inline-flex items-center w-full p-2 hover:bg-white/10 rounded disabled:opacity-50 disabled:cursor-not-allowed" role="menuitem" onClick={handleLogout} disabled={isLoading}>Sign out</button>
                                         </li>
                                     </ul>
                                 </div>

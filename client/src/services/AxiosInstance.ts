@@ -1,6 +1,10 @@
 import axios from "axios";
 
-const AxiosInstance = axios.create({ baseURL: "http://localhost/RNLPROJECT/server/public/api" });
+const AxiosInstance = axios.create({
+  baseURL: import.meta.env.DEV
+    ? "/api"
+    : "http://localhost/RNLPROJECT/server/public/api",
+});
 
 AxiosInstance.interceptors.request.use((config) => {
     const token = localStorage.getItem('token')

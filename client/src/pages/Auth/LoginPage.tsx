@@ -1,10 +1,15 @@
+import ToastMessage from "../../components/ToastMessage/ToastMessage";
+import { useToastMessage } from "../../hooks/useToastMessage";
 import AuthPageLayout from "./AuthPageLayout";
 import LoginForm from "./components/LoginForm";
 
 function LoginPage() {
+    const { message, isFailed, isVisible, showToastMessage, closeToastMessage } = useToastMessage('', false, false);
+
     return (
         <AuthPageLayout>
-            <LoginForm />
+            <ToastMessage message={message} isFailed={isFailed} isVisible={isVisible} onClose={closeToastMessage} />
+            <LoginForm message={showToastMessage} />
         </AuthPageLayout>
     );
 }

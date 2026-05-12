@@ -1,11 +1,13 @@
 import { useCallback, useState } from "react"
 
-export const useToastMessage = (initialMessage: string, initialIsVisible: boolean) => {
+export const useToastMessage = (initialMessage: string, initialIsFailed: boolean = false, initialIsVisible: boolean) => {
     const [message, setMessage] = useState(initialMessage)
+    const [isFailed, setIsFailed] = useState(initialIsFailed)
     const [isVisible, setIsVisible] = useState(initialIsVisible)
 
-    const showToastMessage = useCallback((msg: string) => {
+    const showToastMessage = useCallback((msg: string, failed: boolean = false) => {
         setMessage(msg)
+        setIsFailed(failed)
         setIsVisible(true)
     }, [])
     const closeToastMessage = useCallback(() => {
@@ -17,6 +19,6 @@ export const useToastMessage = (initialMessage: string, initialIsVisible: boolea
     }, [])
 
     return {
-        message, isVisible, showToastMessage, closeToastMessage, toggleToastMessage,
+        message, isFailed, isVisible, showToastMessage, closeToastMessage, toggleToastMessage,
     }
 }

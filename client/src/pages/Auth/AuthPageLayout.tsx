@@ -29,5 +29,4 @@ const AuthPageLayout: FC<AuthPageLayoutProps> = ({ children }) => {
     </>
   )
 }
-
 export default AuthPageLayout

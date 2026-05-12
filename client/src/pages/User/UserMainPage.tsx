@@ -9,7 +9,7 @@ import UserList from "./components/UserList";
 
 const UserMainPage = () => {
     const { isOpen: isAddUserFormModalOpen, openModal: openAddUserFormModal, closeModal: closeAddUserFormModal } = useModal(false);
-    const {message: toastMessage, isVisible: toastMessageIsVisible, showToastMessage, closeToastMessage} = useToastMessage('', false);
+    const {message: toastMessage, isVisible: toastMessageIsVisible, showToastMessage, closeToastMessage} = useToastMessage('', false, false);
 
     const {isOpen: isEditUserFormModalOpen, selectedUser: selectedUserForEdit, openModal: openEditUserFormModal, closeModal: closeEditUserFormModal} = useModal(false);
     const {isOpen: isDeleteUserForModalOpen, selectedUser: selectedUserForDelete, openModal: openDeleteUserForModal     , closeModal: closeDeleteUserForModal} = useModal(false)

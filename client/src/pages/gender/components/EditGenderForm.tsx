@@ -35,7 +35,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
         } catch (error) {
             const status = (error as any)?.response?.status;
             if (status === 404) {
-                navigate('/', { state: { message: 'Gender not found or already deleted.' } });
+                navigate('/genders', { state: { message: 'Gender not found or already deleted.' } });
                 return;
             }
             console.error('Unexpected server error occured during getting gender:', error)
@@ -55,7 +55,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
             if (res.status === 200) {
                 setErrors({})
                 onGenderUpdated(res.data.message)
-                navigate('/', { state: { message: res.data.message } })
+                navigate('/genders', { state: { message: res.data.message } })
             } else {
                 console.error('Unexpected status errror occured during updating gender: ', res.status)
             }
@@ -103,7 +103,7 @@ const EditGenderForm: FC<EditGenderFormProps> = ({ onGenderUpdated }) => {
                     </div>
                     <div className="flex justify-end gap-2">
                         {!loadingUpdate && (
-                            <BackButton label="Back" path="/" />
+                            <BackButton label="Back" path="/genders" />
                         )}
                         <SubmitButton label="Update Gender" loading={loadingUpdate} loadingLabel="Updating Gender..." />
                     </div>
