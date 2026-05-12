@@ -12,9 +12,12 @@ class AuthController extends Controller
 {
     //
     public function login(Request $request) {
-        $validated = $request-> validate ([
+        $validated = $request->validate([
             'username' => ['required', 'min:6', 'max:12'],
-            'password' => ['required', 'min:6', 'max:12']
+            'password' => ['required', 'min:6', 'max:12'],
+        ], [
+            'username.required' => 'the username field is required',
+            'password.required' => 'the password field is required',
         ]);
         $user = User::with(['gender'])
         ->where('tbl_users.username', $validated['username'])
