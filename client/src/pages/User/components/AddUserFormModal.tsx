@@ -1,5 +1,6 @@
 import { useEffect, useState, type FC, type FormEvent } from "react"
 import FloatingLabelInput from "../../../components/input/FloatingLabelInput"
+import UploadInput from "../../../components/input/uploadInput"
 import Modal from "../../../components/Modal"
 import FloatingLabelSelect from "../../../components/select/FloatingLabelSelect"
 import SubmitButton from "../../../components/Button/SubmitButton"
@@ -8,6 +9,7 @@ import GenderService from "../../../services/GenderService"
 import UserService from "../../../services/UserService"
 import type { UserFieldErrors } from "../../../interfaces/UserInterface"
 import type { GenderColumns } from "../../../interfaces/GenderInterface"
+import { formToJSON } from "axios"
 
 interface AddUserFormModalProps {
     onUserAdded: (message: string) => void
@@ -21,6 +23,7 @@ const AddUserFormModal: FC<AddUserFormModalProps> = ({ onUserAdded, refreshKey, 
     const [genders, setGenders] = useState<GenderColumns[]>([]);
 
     const [loadingStore, setLoadingStore] = useState(false);
+    const [addUserProfilePicture, setAddUserProfilePicture] = useState<File | null>(null);
     const [firstName, setFirstName] = useState("");
     const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -39,23 +42,26 @@ const AddUserFormModal: FC<AddUserFormModalProps> = ({ onUserAdded, refreshKey, 
             setLoadingStore(true);
             setErrors({});
 
-            const payload = {
-                first_name: firstName,
-                middle_name: middleName,
-                last_name: lastName,
-                suffix_name: suffixName,
-                gender: gender,
-                birth_date: birthDate,
-                username: username,
-                password: password,
-                password_confirmation: passwordConfirmation
-            };
+            const formData = new FormData()
+            if (addUserProfilePicture) {
+                formData.append('add_user_profile_picture', addUserProfilePicture)
+            }
 
-            const res: any = await UserService.storeUser(payload);
+            formData.append('first_name', firstName)
+            formData.append('middle_name', middleName || "")
+            formData.append('last_name', lastName);
+            formData.append('suffix_name', suffixName || "");
+            formData.append('gender', gender);
+            formData.append('birth_date', birthDate);
+            formData.append('username', username)
+            formData.append('password', password);
+            formData.append('password_confirmation', passwordConfirmation)
+
+            const res: any = await UserService.storeUser(formData);
 
             if (res.status === 200) {
 
-
+                setAddUserProfilePicture(null);
                 setFirstName("");
                 setMiddleName("");
                 setLastName("");
@@ -115,6 +121,10 @@ const AddUserFormModal: FC<AddUserFormModalProps> = ({ onUserAdded, refreshKey, 
                     <h1 className="text-2xl border-b border-gray-100 p-4 font-semibold mb-4">
                         Add User Form
                     </h1>
+                    <div className="mb-4">
+                        <UploadInput label="Profile Picture" name="add_user_profile_picture" value={addUserProfilePicture} onChange={setAddUserProfilePicture} errors={errors.add_user_profile_picture} />
+                    </div>
+
                     {Object.keys(errors).length > 0 && (
                         <p className="text-red-600 text-xs mb-3 px-4">
                             Please fix the highlighted fields.
